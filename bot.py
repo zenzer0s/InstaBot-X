@@ -66,10 +66,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "🔍 Instagram link detected! What would you like to download?",
             reply_markup=reply_markup,
         )
-
-        # **Pre-fetch data to reduce wait time**
-        asyncio.create_task(fetch_instagram_data(shortcode))
-
     else:
         await update.message.reply_text(
             "❓ Please send a valid Instagram post or reel link.\n"
@@ -139,7 +135,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
     processing_message = await query.message.reply_text("⏳ Processing your request...")
 
-    # Fetch everything in one call (pre-fetched if available)
+    # Fetch everything in one call
     fetched_data = await fetch_instagram_data(shortcode)
     if not fetched_data:
         await processing_message.edit_text("❌ Failed to fetch data. Try again later.")
