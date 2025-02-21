@@ -124,7 +124,7 @@ async def download_file(session, url, filename):
             if response.status == 200:
                 with open(filename, "wb") as f:
                     f.write(await response.read())
-                return filename
+                return str(filename)  # Convert Path object to string
     except Exception as e:
         logger.error(f"Failed to download {url}: {e}")
         return None
@@ -158,7 +158,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         if media_files:
             await processing_message.edit_text("📤 Uploading media to Telegram...")
             for media_file in media_files:
-                if media_file and Path(media_file).exists():
+                if media_file and os.path.exists(media_file):
                     if media_file.endswith(".jpg"):
                         await query.message.reply_photo(photo=open(media_file, 'rb'))
                     elif media_file.endswith(".mp4"):
